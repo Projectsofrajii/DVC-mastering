@@ -1,0 +1,125 @@
+1.Retrive latest updated timestamp
+    -The queryset variable is set to all RsmMeterMaster objects in the database,
+    -with related instant, meter, and daily load profiles prefetched using Prefetch objects.
+    -prefetch_related() is used to prefetch related objects for each RsmMeterMaster - based on foreignkey's related_name
+    -Prefetch is used to specify the related objects to
+    -prefetch and store them in a named attribute, such as instant_records, meter_records and daily_records.
+    -to_attr-> we are specifing the entire query to--> container
+2.Authentication:
+    -In some cases, you may want to authenticate users using an API token rather than a (username and password).
+    -Django supports token authentication out of the box, making it easy to implement this type of authentication
+    To create secure API's using global token - settings.py
+	1.create token with encoded value and store in sett.py -> eg: SECURE_KEY ="NKJDFHOER94543"
+	2. KEY = settings.SECURE_KEY
+            if KEY == request.headers['KEY']:
+            	#your code
+            else:
+            	#your code
+                return Response({"Detail": "Authentication credentials were not provided."})
+3.PyCDF:
+    -> PyCdf is specifically designed to work with only Common Data Format(CDF)
+        ->cannot be used directly to work with NetCDF or HDF
+4.To read/write CDF(Network Common Data Form) files in Python.
+    -> popular libraries used -> netCDF4, xarray, and PyCDF.
+    -> file format <file_name.nc>
+    -> Computable data format - is an electronic document format
+    -> designed to allow authoring dynamically generated, interactive content
+pip install pycdf
+eg:
+import pycdf
+
+# Open the CDF file for reading
+cdf_file = pycdf.CDF('path/to/cdf/file.cdf', 'r')
+
+# Get the value of a variable named "temperature"
+temperature_data = cdf_file['temperature'][:]
+
+# Close the CDF file
+cdf_file.close()
+
+1.plot[sin[x],{x,0,6}] -> enter(your plot will ready)
+2.after plot created-> it should be converted into compatible format --> so that it can be read on CDF player
+3. this can be done from current mathematica notebook [file-CDF export - standalone(used when run data through CDF player)
+
+5.For India time stamp:
+    TIME_ZONE = 'Asia/Kolkata'
+    USE_I18N = True
+    USE_L10N = True
+    USE_TZ = False
+
+    one_minute_ago = current_time - timedelta(seconds=60)
+    time_difference = current_time - time
+    days = time_difference.days  # Extract the time components from the time difference
+    hours, remainder = divmod(time_difference.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+6.django.db.utils.OperationalError: (2003, "Can't connect to MySQL server on '52.12.47.10:3306' (101)")
+solution: check your internet connection
+
+7. time differernce in seconds
+    time = timezone.now()
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S")
+    instant_time = ins_values[0]
+    time_format = "%d-%m-%Y %H:%M:%S"
+    ins_time = datetime.strptime(str(instant_time),time_format)
+    time_difference = time - ins_time
+    time_difference_str = time_difference.total_seconds()
+
+8. time differernce in seconds/minutes/days/hours
+    time = timezone.now()
+    current_time = time.strftime("%Y-%m-%d %H:%M:%S")
+    current_timestamp = datetime.now().timestamp()
+    instant_time = ins_values[0]
+    time_format = "%d-%m-%Y %H:%M:%S"
+    ins_time = datetime.strptime(str(instant_time),time_format)
+    time_difference = time - ins_time
+    days = time_difference.days
+    hours, remainder = divmod(time_difference.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    time_difference_str = "{} days, {} hours, {} minutes, {} seconds".format(days, hours, minutes, seconds)
+
+9.install redis
+    pip install redis
+    pip install channels_redis
+    sudo apt install redis-tools
+    error raise:
+        raise ConnectionError(self._error_message(e))
+        redis.exceptions.ConnectionError: Error 111 connecting to 127.0.0.1:6379. 111.
+        WebSocket DISCONNECT /ws/meter/ [127.0.0.1:59196]
+        Exception in thread Thread-3:
+        enter : redis-cli - to check the status of the redis
+            if :Could not connect to Redis at 127.0.0.1:6379: Connection refused not connected>
+                again check server is running/not:
+                sudo apt install redis-server
+        check again : redis-cli ping -> response ->PONG OK
+                      redis-cli -> response -> 127.0.0.1:6379> done!
+
+10.#WebSocket send()->client/server -send messages to the server->WebSocketConsumer instance
+#WebSocket receive()client - handle incoming messages from the client ->WebSocketConsumer instance
+
+11.if we use AsyncWebsocketConsumer-> it will handshake/disconnect
+if we use WebsocketConsumer-> it will handshake/connect
+#keepinmind-> use Django Channels -> project need to configure ASGI
+    -ASGI (Asynchronous Server Gateway Interface)server such as Daphne,
+    -also configure routing - WebSocket consumers.
+
+12.Django Websocket & Project Structure:
+    user ->1.HTTP request ->WSGI(Apache/NGINX) ->views.py
+         ->2.Websockets   ->ASGI(Daphine)      ->consumers.py
+
+13.Daphne vs Channels
+#Daphne - good smaller applications /that don't require complex real-time functionality.
+    faster and more lightweight than Channels
+#Channels -  provides more advanced features for real-time communication(WebSocket)
+    Also supports routing and middleware,
+    making it more flexible and extensible than Daphne.
+
+14.To install Daphine:
+    pip install daphine
+    include in set.py installed apps at top - > 'daphine',
+    include setup in asgi file
+    include in set.py-> ASGI_APPLICATION = "myproject.asgi.application"
+    run the server
+
+15.TO DO LIST:
+    1.mqtt with multiple topic configiration check

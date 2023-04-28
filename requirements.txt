@@ -1,0 +1,15 @@
+asgiref==3.6.0
+Django==4.1.6
+djangorestframework==3.14.0
+mysqlclient==2.1.1
+paho-mqtt==1.6.1
+pip==23.0.1
+pytz==2019.3
+setuptools==67.4.0
+six==1.14.0
+sqlparse==0.4.3
+virtualenv==20.17.1
+wheel==0.38.4
+redis==4.5.4
+redis-tools==0.0.2
+daphne==4.0.0
